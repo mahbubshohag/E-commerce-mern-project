@@ -10,3 +10,5 @@
 8. Express Error Handling middleware -> body-parser
 9. How to handle HTTP errors-> http-errors
 10. API secure -> xss-clean, express-rate-limit
+11. environment variable & gitignore
+12. MVC architecture
