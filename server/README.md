@@ -12,3 +12,11 @@
 10. API secure -> xss-clean, express-rate-limit
 11. environment variable & gitignore
 12. MVC architecture
+13. connect to MongoDB database
+14. Schema & Model for user
+15. create seed route for testing
+16. GET/api/users -> getAllUsers -> searchByName+pagination functionality
+17. responseHandler controller for error or success
+18. GET/api/users/:id -> get a single user by id
+19. How to create services in the backend
+20. DELETE /api/users/:id -> delete a single user by id
