@@ -20,3 +20,10 @@
 18. GET/api/users/:id -> get a single user by id
 19. How to create services in the backend
 20. DELETE /api/users/:id -> delete a single user by id
+21. Refactoring & reusabilty, dynamic
+22. deleteImage helper 
+23. POST/api/users/process-register --> process the registration
+24. POST/api/users/verify --> verify+ register into database
+25. add express validator middleware.
+26. add multer middleware for file upload.
+27. PUT /api/users/:id --> update a single user

@@ -1,10 +1,11 @@
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const createError = require('http-errors');
 const User = require('../models/userModel');
 const { successResponse } = require('./responseController');
 const mongoose = require('mongoose');
 const { findWithId } = require('../services/findItem');
+const { deleteImage } = require('../helper/deleteImage');
 
 
 const getUsers = async (req, res, next) => {
@@ -57,11 +58,11 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-const getUser = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
      const options = { password: 0 };
-    const user = await findWithId(id, options);
+    const user = await findWithId(User, id, options);
 
     return successResponse(res, {
       statusCode: 200,
@@ -78,32 +79,18 @@ const getUser = async (req, res, next) => {
   }
 };
 
-  
 
-const deleteUser = async (req, res, next) => {
+const deleteUserById = async (req, res, next) => {
   try {
     const id = req.params.id;
      const options = { password: 0 };
-    const user = await findWithId(id, options);
-
-    
-
+    const user = await findWithId(User, id, options);
 
     const userImagePath = user.image;
-    fs.access(userImagePath, (err) => {
-      if(err){
-        console.error('User image does not exist', err);
-      }
-      else {
-        fs.unlink(userImagePath, (err) => {
-          if(err){
-            throw err;
-          }
-          console.log('user image was deleted');
-        });
-      }
-    });
 
+    deleteImage(userImagePath);
+    
+ 
     await User.findByIdAndDelete(
       { _id: id,
         isAdmin: false },
@@ -124,4 +111,36 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, getUser, deleteUser };
+
+const processRegister = async (req, res, next) => {
+  try {
+    const {name, email, password, phone, address} = req.body || {};
+    
+
+    const userExists = await User.exists({ email: email });
+    if (userExists) {
+      throw createError(409, 'User already exists with this email. please login instead');
+    }
+ const newUser ={
+      name,
+      email,
+      password,
+      phone,
+      address
+    };
+
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User was created successfully",
+      payload: { newUser },
+    });
+
+  } catch (error) {
+    if (error instanceof mongoose.Error.CastError) {
+      return next(createError(400, 'Invalid user ID'));
+    }
+    next(error);
+  }
+};
+
+module.exports = { getUsers, getUserById, deleteUserById ,processRegister };

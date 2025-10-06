@@ -1,9 +1,18 @@
 const express = require('express');
 const userRouter = express.Router();
-const { getUsers, getUser, deleteUser } = require('../controllers/userController');
+const { 
+    getUsers,
+     getUser,
+      deleteUserById, 
+      getUserById,
+      processRegister
+     } = require('../controllers/userController');
 
+
+     //GET: api/users
 userRouter.get('/', getUsers);
-userRouter.get('/:id', getUser);
-userRouter.delete('/:id', deleteUser);
+userRouter.get('/:id', getUserById);
+userRouter.delete('/:id', deleteUserById);
+userRouter.post('/process-register', processRegister);
 
 module.exports = userRouter;
